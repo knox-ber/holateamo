@@ -2,25 +2,52 @@
 """
 ~/.config/apply-colors.py  (chmod +x)
 
-Fuente única de verdad: ~/.config/colors.json
-Este script la traduce a los formatos nativos de cada programa:
+Uso:
+    apply-colors.py                       -> usa ~/.config/colors.json
+    apply-colors.py ~/temas/earthy.json   -> aplica esa paleta y la copia
+                                             a ~/.config/colors.json (estado actual)
 
+Guarda tus paletas donde quieras (p. ej. ~/.config/themes/nord.json,
+~/.config/themes/earthy.json) y aplica una con:
+    apply-colors.py ~/.config/themes/earthy.json
+
+Genera:
   ~/.config/alacritty/colors.toml   (importado por alacritty.toml)
   ~/.config/polybar/colors.ini      (incluido por config.ini)
   ~/.config/cava/config             (generado completo)
-
-Flujo: editas colors.json -> corres este script -> relanzas polybar
-(alacritty recarga solo). Ranger no necesita hex: usa los 16 colores
-del terminal, que Alacritty deriva de este mismo JSON.
 
 NO edites a mano los archivos generados: se sobreescriben.
 """
 
 import json
+import shutil
+import sys
 from pathlib import Path
 
 CONFIG = Path.home() / ".config"
-C = json.loads((CONFIG / "colors.json").read_text())
+CURRENT = CONFIG / "colors.json"
+
+# --- Resolver qué paleta aplicar ---
+if len(sys.argv) > 1:
+    source = Path(sys.argv[1]).expanduser()
+    if not source.exists():
+        sys.exit(f"error: no existe {source}")
+else:
+    source = CURRENT
+    if not source.exists():
+        sys.exit(f"error: no existe {CURRENT} (pásame una paleta como argumento)")
+
+C = json.loads(source.read_text())
+
+REQUIRED = [
+    "Background", "BackgroundAlt", "Surface", "Selection",
+    "Foreground", "ForegroundSoft", "ForegroundBright",
+    "AccentPrimary", "AccentSecondary", "AccentTertiary", "AccentDeep",
+    "Error", "Orange", "Warning", "Success", "Media",
+]
+missing = [k for k in REQUIRED if k not in C]
+if missing:
+    sys.exit(f"error: a {source.name} le faltan claves: {', '.join(missing)}")
 
 BAR_ALPHA = "E6"  # transparencia del fondo de polybar (00-FF)
 
@@ -34,7 +61,7 @@ def a(name: str, alpha: str = BAR_ALPHA) -> str:
 # Alacritty -> ~/.config/alacritty/colors.toml
 # ---------------------------------------------------------------
 alacritty = f"""# GENERADO por ~/.config/apply-colors.py — no editar a mano.
-# Fuente: ~/.config/colors.json
+# Paleta origen: {source}
 
 [colors.primary]
 background = "{C['Background']}"
@@ -85,7 +112,7 @@ white   = "{C['ForegroundBright']}"
 # Polybar -> ~/.config/polybar/colors.ini
 # ---------------------------------------------------------------
 polybar = f"""; GENERADO por ~/.config/apply-colors.py — no editar a mano.
-; Fuente: ~/.config/colors.json
+; Paleta origen: {source}
 
 [colors]
 background        = {a('Background')}
@@ -111,7 +138,7 @@ media             = {C['Media']}
 # Cava -> ~/.config/cava/config  (archivo completo)
 # ---------------------------------------------------------------
 cava = f"""# GENERADO por ~/.config/apply-colors.py — no editar a mano.
-# Fuente: ~/.config/colors.json
+# Paleta origen: {source}
 
 [general]
 framerate = 60
@@ -146,5 +173,10 @@ for path, content in targets.items():
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content)
     print(f"  escrito  {path}")
+
+# Registrar la paleta aplicada como estado actual
+if source.resolve() != CURRENT.resolve():
+    shutil.copy(source, CURRENT)
+    print(f"  copiada  {source} -> {CURRENT}")
 
 print("Listo. Relanza polybar (~/.config/polybar/launch.sh); alacritty recarga solo.")
