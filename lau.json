@@ -1,0 +1,18 @@
+{
+  "Background": "#ecddc6",
+  "BackgroundAlt": "#684a32",
+  "Surface": "#d6dee1",
+  "Selection": "#aac6d2",
+  "Foreground": "#3f617a",
+  "ForegroundSoft": "#d5dccc",
+  "ForegroundBright": "#d6dee1",
+  "AccentPrimary": "#abbba1",
+  "AccentSecondary": "#546d58",
+  "AccentTertiary": "#6c8ca3",
+  "AccentDeep": "#3f617a",
+  "Error": "#8d5b40",
+  "Orange": "#684a32",
+  "Warning": "#bea27b",
+  "Success": "#314e3c",
+  "Media": "#546d58"
+}
