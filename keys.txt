@@ -1,0 +1,23 @@
+-- define keybindings
+myKeys :: [(String, X ())]
+myKeys =
+        [ ("M-S-<Return>", spawn "alacritty")
+        , ("M-S-b", spawn "firefox")
+        , ("M-S-e", spawn "alacritty -e ranger")
+        , ("M-S-m", spawn "rofi -show drun")
+
+        -- Volumen
+        , ("<XF86AudioRaiseVolume>", spawn "pamixer -i 5")
+        , ("<XF86AudioLowerVolume>", spawn "pamixer -d 5")
+        , ("<XF86AudioMute>",        spawn "pamixer -t")
+        , ("<XF86AudioMicMute>",     spawn "pamixer --default-source -t")
+
+        -- Brillo
+        , ("<XF86MonBrightnessUp>",   spawn "brightnessctl set +10%")
+        , ("<XF86MonBrightnessDown>", spawn "brightnessctl set 10%-")
+
+        -- Reproducción
+        , ("<XF86AudioPlay>",  spawn "playerctl play-pause")
+        , ("<XF86AudioNext>",  spawn "playerctl next")
+        , ("<XF86AudioPrev>",  spawn "playerctl previous")
+        ]
