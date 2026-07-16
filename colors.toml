@@ -1,0 +1,54 @@
+# Earthy — paleta clara azul/verde/crema
+# Misma estructura que el Nord.toml oficial de Sven Greb.
+# Principales: #ecddc6 (fondo), #aac6d2 (selección), #abbba1 (acento).
+
+[colors.primary]
+background = "#ecddc6"
+foreground = "#3f617a"
+dim_foreground = "#6c8ca3"
+
+[colors.cursor]
+text = "#ecddc6"
+cursor = "#3f617a"
+
+[colors.vi_mode_cursor]
+text = "#ecddc6"
+cursor = "#3f617a"
+
+[colors.selection]
+text = "CellForeground"
+background = "#aac6d2"
+
+[colors.search.matches]
+foreground = "CellBackground"
+background = "#abbba1"
+
+[colors.normal]
+black = "#684a32"
+red = "#8d5b40"
+green = "#314e3c"
+yellow = "#bea27b"
+blue = "#6c8ca3"
+magenta = "#546d58"
+cyan = "#abbba1"
+white = "#d5dccc"
+
+[colors.bright]
+black = "#aac6d2"
+red = "#8d5b40"
+green = "#314e3c"
+yellow = "#bea27b"
+blue = "#3f617a"
+magenta = "#546d58"
+cyan = "#546d58"
+white = "#d6dee1"
+
+[colors.dim]
+black = "#896f57"
+red = "#a57c62"
+green = "#60725e"
+yellow = "#cab18e"
+blue = "#8ca0ac"
+magenta = "#7a8974"
+cyan = "#bbc4aa"
+white = "#dbdcca"
